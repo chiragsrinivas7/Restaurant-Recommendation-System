@@ -341,7 +341,15 @@ class RestaurantRecommendationSystem:
         print("Cost Error in Rupees: ", math.sqrt(sum_cost/count))
         print("Rating Error: ", math.sqrt(sum_rat/self.rat))
         print()
-
-rrs=RestaurantRecommendationSystem()
-#data_visualisation()   
-            
+print()
+print()
+ch = int(input("Enter 1 for DataVisualization, 2 for Recommendation System, Enter any other number for both: "))
+print()
+if(ch == 1):
+    data_visualisation()
+elif(ch == 2):
+    rrs=RestaurantRecommendationSystem()
+else:
+    data_visualisation()
+    print()
+    rrs=RestaurantRecommendationSystem()
