@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import sys
 import math
+import random
 
 # reading the dataset
 data = pd.read_csv('zomato.csv')
@@ -55,6 +56,128 @@ X_del.dropna(how='any', inplace=True)
 
 # Remove duplicates
 X_del.drop_duplicates(subset='name', keep='first', inplace=True)
+
+def data_visualisation():
+    global X_del
+    #Pie chart for understanding persentage of people from each location
+    s=set()
+    d=dict()
+    for i in X_del.city:
+        if i not in s:
+            s.add(i)
+            d.update({i:1})
+        else:
+            d[i]+=1
+
+    labels = d.keys()
+    sizes = d.values()
+    colors=[]
+
+    for x in labels:
+        rgb = (random.random(), random.random(), random.random())
+        colors.append(rgb)
+
+    plt.pie(sizes, labels=labels, colors=colors,autopct='%1.1f%%', shadow=True, startangle=140)
+    plt.title("Understanding percentage of people from each location\n\n")
+    plt.axis('equal')
+    plt.show()
+
+
+    # Pie chart for understanding percentage of restaurants offering online delivery
+    s=set()
+    d=dict()
+
+    for i in X_del.online_order:
+        if i not in s:
+            s.add(i)
+            d.update({i:1})
+        else:
+            d[i]+=1
+
+    labels = d.keys()
+    sizes = d.values()
+    colors=[]
+
+    for x in labels:
+        rgb = (random.random(), random.random(), random.random())
+        colors.append(rgb)
+
+    plt.pie(sizes, labels=labels, colors=colors,
+    autopct='%1.1f%%', shadow=True, startangle=140)
+    plt.title("Understanding the type category from each location")
+    plt.axis('equal')
+    plt.show()
+
+
+    #Bar chart showing avg cost of food for each area of the city.
+    s=set()
+    d=dict()
+        
+    for i in X_del.city:
+        if i not in s:
+            s.add(i)
+            d.update({i:1})
+        else:
+            d[i]+=1
+
+    d_cost=dict()
+
+    for i in s:
+        d_cost.update({i:0})
+
+    for i in X_del.index:
+        d_cost[X_del.city[i]]+=X_del.cost[i]
+
+    for i in s:
+        d_cost[i]=d_cost[i]/d[i]
+
+    plt.title("Average cost vs Location")
+    plt.ylabel('Average cost')
+    plt.bar(d.keys(),height=d_cost.values())
+    plt.xticks(rotation=90)
+    plt.show()
+
+
+    #Scatter plot for votes vs cost
+    x = X_del.cost
+    y = X_del.votes
+
+    plt.title('Scatter plot for cost vs votes')
+    plt.scatter(x,y)
+    plt.show()
+
+
+    #Histogram for cost
+    x = X_del.cost
+
+    plt.title('Histogram plot for cost')
+    plt.hist(x,bins=50)
+    plt.show()
+
+
+    #Bar chart showing avg no of cuisines offered in each area
+    s=set()
+    d=dict()
+
+    count_d=dict()
+
+    for i,j in zip(X_del.city,X_del.cuisines):
+        if i not in s:
+            s.add(i)
+            count_d.update({i:1})
+            d.update({i:len(j.split(', '))})
+        else:
+            count_d[i]+=1
+            d[i]+=len(j.split(', '))
+
+    for i,j in zip(d,count_d):
+        d[i]=d[i]/count_d[i]
+
+    plt.title("Average no of cuisines offered vs Location")
+    plt.ylabel('Average no of cuisines')
+    plt.bar(d.keys(),height=d.values())
+    plt.xticks(rotation=90)
+    plt.show()
 
 class RestaurantRecommendationSystem:
     def __init__(self):
@@ -220,5 +343,5 @@ class RestaurantRecommendationSystem:
         print()
 
 rrs=RestaurantRecommendationSystem()
-    
+#data_visualisation()   
             
